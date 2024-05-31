@@ -125,14 +125,25 @@ export const SvgMask = ({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={onPressMask}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        onPressMask?.();
+        console.log("OUTER PRESS MAYBE");
+      }}
+    >
       <View
         style={style}
         onLayout={handleLayout}
         onStartShouldSetResponder={() => true}
       >
         {canvasSize ? (
-          <Svg pointerEvents="none" width={canvasSize.x} height={canvasSize.y}>
+          <Svg
+            onPress={() => {
+              console.log("OUTER PRESS MAYBE 2");
+            }}
+            width={canvasSize.x}
+            height={canvasSize.y}
+          >
             <AnimatedSvgPath
               onPress={() => {
                 console.log("INNER PRESS");
