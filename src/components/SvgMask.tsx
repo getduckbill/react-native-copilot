@@ -25,7 +25,7 @@ const defaultSvgPath: SvgMaskPathFunction = ({
   const positionY = position.y._value - padding;
   const sizeX = size.x._value + 2 * padding;
   const sizeY = size.y._value + 2 * padding;
-  
+
   return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${positionX + cornerRadius}, ${positionY}H${positionX + sizeX - cornerRadius}Q${positionX + sizeX}, ${positionY} ${positionX + sizeX}, ${positionY + cornerRadius}V${positionY + sizeY - cornerRadius}Q${positionX + sizeX}, ${positionY + sizeY} ${positionX + sizeX - cornerRadius}, ${positionY + sizeY}H${positionX + cornerRadius}Q${positionX}, ${positionY + sizeY} ${positionX}, ${positionY + sizeY - cornerRadius}V${positionY + cornerRadius}Q${positionX}, ${positionY} ${positionX + cornerRadius}, ${positionY}Z`;
 };
 
@@ -38,7 +38,8 @@ export const SvgMask = ({
   animated,
   backdropColor,
   svgMaskPath = defaultSvgPath,
-  onClick,
+  onPressMask,
+  onPressInner,
   currentStep,
 }: MaskProps) => {
   const [canvasSize, setCanvasSize] = useState<ValueXY>({
@@ -46,10 +47,10 @@ export const SvgMask = ({
     y: windowDimensions.height,
   });
   const sizeValue = useRef<Animated.ValueXY>(
-    new Animated.ValueXY(size ?? { x: 0, y: 0 })
+    new Animated.ValueXY(size ?? { x: 0, y: 0 }),
   ).current;
   const positionValue = useRef<Animated.ValueXY>(
-    new Animated.ValueXY(position ?? { x: 0, y: 0 })
+    new Animated.ValueXY(position ?? { x: 0, y: 0 }),
   ).current;
   const maskRef = useRef<any>(null);
 
@@ -96,7 +97,7 @@ export const SvgMask = ({
       position,
       size,
       sizeValue,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -124,7 +125,7 @@ export const SvgMask = ({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={onClick}>
+    <TouchableWithoutFeedback onPress={onClickMask}>
       <View
         style={style}
         onLayout={handleLayout}
@@ -133,6 +134,7 @@ export const SvgMask = ({
         {canvasSize ? (
           <Svg pointerEvents="none" width={canvasSize.x} height={canvasSize.y}>
             <AnimatedSvgPath
+              onPress={() => console.log("INNER PRESS")}
               ref={maskRef}
               fill={backdropColor}
               fillRule="evenodd"
