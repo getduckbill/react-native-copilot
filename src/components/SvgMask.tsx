@@ -125,36 +125,34 @@ export const SvgMask = ({
   };
 
   return (
-    <TouchableWithoutFeedback style={{ pointerEvents: "none" }}>
-      <View
-        style={style}
-        onLayout={handleLayout}
-        onStartShouldSetResponder={() => true}
-        pointerEvents="none"
-      >
-        {canvasSize ? (
-          <Svg
+    <View
+      style={style}
+      onLayout={handleLayout}
+      onStartShouldSetResponder={() => true}
+      pointerEvents="none"
+    >
+      {canvasSize ? (
+        <Svg
+          pointerEvents="none"
+          style={{ pointerEvents: "none" }}
+          width={canvasSize.x}
+          height={canvasSize.y}
+        >
+          <AnimatedSvgPath
             pointerEvents="none"
-            style={{ pointerEvents: "none" }}
-            width={canvasSize.x}
-            height={canvasSize.y}
-          >
-            <AnimatedSvgPath
-              pointerEvents="none"
-              ref={maskRef}
-              fill={backdropColor}
-              fillRule="evenodd"
-              strokeWidth={1}
-              d={svgMaskPath({
-                size: sizeValue,
-                position: positionValue,
-                canvasSize,
-                step: currentStep,
-              })}
-            />
-          </Svg>
-        ) : null}
-      </View>
-    </TouchableWithoutFeedback>
+            ref={maskRef}
+            fill={backdropColor}
+            fillRule="evenodd"
+            strokeWidth={1}
+            d={svgMaskPath({
+              size: sizeValue,
+              position: positionValue,
+              canvasSize,
+              step: currentStep,
+            })}
+          />
+        </Svg>
+      ) : null}
+    </View>
   );
 };
