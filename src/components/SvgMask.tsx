@@ -138,9 +138,8 @@ export const SvgMask = ({
       >
         {canvasSize ? (
           <Svg
-            onPress={() => {
-              console.log("OUTER PRESS MAYBE 2");
-            }}
+            pointerEvents="none"
+            style={{ pointerEvents: "none" }}
             width={canvasSize.x}
             height={canvasSize.y}
           >
