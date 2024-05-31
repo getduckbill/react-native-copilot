@@ -4,6 +4,7 @@ import {
   Dimensions,
   Easing,
   View,
+  TouchableWithoutFeedback,
   type LayoutChangeEvent,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
@@ -18,14 +19,14 @@ const defaultSvgPath: SvgMaskPathFunction = ({
   position,
   canvasSize,
 }): string => {
-  const positionX = (position.x as any)._value as number;
-  const positionY = (position.y as any)._value as number;
-  const sizeX = (size.x as any)._value as number;
-  const sizeY = (size.y as any)._value as number;
-
-  return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${positionX},${positionY}H${
-    positionX + sizeX
-  }V${positionY + sizeY}H${positionX}V${positionY}Z`;
+  const cornerRadius = 12; // You can adjust this value based on the desired radius
+  const padding = 12;
+  const positionX = position.x._value - padding;
+  const positionY = position.y._value - padding;
+  const sizeX = size.x._value + 2 * padding;
+  const sizeY = size.y._value + 2 * padding;
+  
+  return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${positionX + cornerRadius}, ${positionY}H${positionX + sizeX - cornerRadius}Q${positionX + sizeX}, ${positionY} ${positionX + sizeX}, ${positionY + cornerRadius}V${positionY + sizeY - cornerRadius}Q${positionX + sizeX}, ${positionY + sizeY} ${positionX + sizeX - cornerRadius}, ${positionY + sizeY}H${positionX + cornerRadius}Q${positionX}, ${positionY + sizeY} ${positionX}, ${positionY + sizeY - cornerRadius}V${positionY + cornerRadius}Q${positionX}, ${positionY} ${positionX + cornerRadius}, ${positionY}Z`;
 };
 
 export const SvgMask = ({
@@ -45,15 +46,15 @@ export const SvgMask = ({
     y: windowDimensions.height,
   });
   const sizeValue = useRef<Animated.ValueXY>(
-    new Animated.ValueXY(size)
+    new Animated.ValueXY(size ?? { x: 0, y: 0 })
   ).current;
   const positionValue = useRef<Animated.ValueXY>(
-    new Animated.ValueXY(position)
+    new Animated.ValueXY(position ?? { x: 0, y: 0 })
   ).current;
   const maskRef = useRef<any>(null);
 
   const animationListener = useCallback(() => {
-    const d: string = svgMaskPath({
+    const d = svgMaskPath({
       size: sizeValue,
       position: positionValue,
       canvasSize,
@@ -123,27 +124,29 @@ export const SvgMask = ({
   };
 
   return (
-    <View
-      style={style}
-      onLayout={handleLayout}
-      onStartShouldSetResponder={onClick}
-    >
-      {canvasSize ? (
-        <Svg pointerEvents="none" width={canvasSize.x} height={canvasSize.y}>
-          <AnimatedSvgPath
-            ref={maskRef}
-            fill={backdropColor}
-            fillRule="evenodd"
-            strokeWidth={1}
-            d={svgMaskPath({
-              size: sizeValue,
-              position: positionValue,
-              canvasSize,
-              step: currentStep,
-            })}
-          />
-        </Svg>
-      ) : null}
-    </View>
+    <TouchableWithoutFeedback onPress={onClick}>
+      <View
+        style={style}
+        onLayout={handleLayout}
+        onStartShouldSetResponder={() => true}
+      >
+        {canvasSize ? (
+          <Svg pointerEvents="none" width={canvasSize.x} height={canvasSize.y}>
+            <AnimatedSvgPath
+              ref={maskRef}
+              fill={backdropColor}
+              fillRule="evenodd"
+              strokeWidth={1}
+              d={svgMaskPath({
+                size: sizeValue,
+                position: positionValue,
+                canvasSize,
+                step: currentStep,
+              })}
+            />
+          </Svg>
+        ) : null}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
