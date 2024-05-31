@@ -135,6 +135,7 @@ export const SvgMask = ({
         style={style}
         onLayout={handleLayout}
         onStartShouldSetResponder={() => true}
+        pointerEvents="none"
       >
         {canvasSize ? (
           <Svg
@@ -144,6 +145,7 @@ export const SvgMask = ({
             height={canvasSize.y}
           >
             <AnimatedSvgPath
+              pointerEvents="none"
               onPress={() => {
                 console.log("INNER PRESS");
                 onPressInner?.();
