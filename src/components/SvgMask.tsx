@@ -125,12 +125,7 @@ export const SvgMask = ({
   };
 
   return (
-    <TouchableWithoutFeedback
-      style={{ pointerEvents: "none" }}
-      // onPress={() => {
-      //   onPressMask?.();
-      // }}
-    >
+    <TouchableWithoutFeedback style={{ pointerEvents: "none" }}>
       <View
         style={style}
         onLayout={handleLayout}
@@ -146,10 +141,6 @@ export const SvgMask = ({
           >
             <AnimatedSvgPath
               pointerEvents="none"
-              onPress={() => {
-                console.log("INNER PRESS");
-                onPressInner?.();
-              }}
               ref={maskRef}
               fill={backdropColor}
               fillRule="evenodd"
