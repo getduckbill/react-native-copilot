@@ -129,17 +129,17 @@ export const SvgMask = ({
       style={style}
       onLayout={handleLayout}
       onStartShouldSetResponder={() => true}
-      pointerEvents="none"
+      pointerEvents="box-none"
     >
       {canvasSize ? (
         <Svg
-          pointerEvents="none"
-          style={{ pointerEvents: "none" }}
+          pointerEvents="box-none"
+          style={{ pointerEvents: "box-none" }}
           width={canvasSize.x}
           height={canvasSize.y}
         >
           <AnimatedSvgPath
-            pointerEvents="none"
+            pointerEvents="box-none"
             ref={maskRef}
             fill={backdropColor}
             fillRule="evenodd"
