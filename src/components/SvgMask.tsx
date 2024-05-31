@@ -126,10 +126,10 @@ export const SvgMask = ({
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => {
-        onPressMask?.();
-        console.log("OUTER PRESS MAYBE");
-      }}
+      style={{ pointerEvents: "none" }}
+      // onPress={() => {
+      //   onPressMask?.();
+      // }}
     >
       <View
         style={style}
